@@ -1,33 +1,55 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os/exec"
+	"syscall"
 )
 
 func execWindows(ports, portRange []string) (string, error) {
-	if len(ports) > 1 && len(portRange) > 1 {
-		return "", errors.New("cannot have range and port flag at the same time")
-	}
+	var ws syscall.WaitStatus
 
 	for _, port := range ports {
 		command := fmt.Sprintf("(Get-NetTCPConnection -LocalPort %s).OwningProcess -Force", port)
-		exec.Command("Stop-Process", "-Id", command)
-	}
+		cmd := exec.Command("Stop-Process", "-Id", command)
+		if err := cmd.Run(); err != nil {
+			if err != nil {
+				return "", err
+			}
 
-	return "", nil
+			if exiterr, ok := err.(*exec.ExitError); ok {
+				ws = exiterr.Sys().(syscall.WaitStatus)
+				return "", exiterr
+			}
+		}
+
+		ws = cmd.ProcessState.Sys().(syscall.WaitStatus)
+		fmt.Printf("Port successfully killed (exit code: %s)\n", []byte(fmt.Sprintf("%d", ws.ExitStatus())))
+	}
+	return "complete", nil
 }
 
 func execUnix(ports, portRange []string) (string, error) {
-	if len(ports) > 1 && len(portRange) > 1 {
-		return "", errors.New("cannot have range and port flag at the same time")
-	}
+	var ws syscall.WaitStatus
 
 	for _, port := range ports {
 		command := fmt.Sprintf("lsof -i tcp:%s | grep LISTEN | awk '{print $2}' | xargs kill -9", port)
-		exec.Command("bash", "-c", command)
+		cmd := exec.Command("bash", "-c", command)
+
+		if err := cmd.Run(); err != nil {
+			if err != nil {
+				return "", err
+			}
+
+			if exiterr, ok := err.(*exec.ExitError); ok {
+				ws = exiterr.Sys().(syscall.WaitStatus)
+				return "", exiterr
+			}
+		}
+
+		ws = cmd.ProcessState.Sys().(syscall.WaitStatus)
+		fmt.Printf("Port successfully killed (exit code: %s)\n", []byte(fmt.Sprintf("%d", ws.ExitStatus())))
 	}
 
-	return "", nil
+	return "complete", nil
 }

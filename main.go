@@ -21,6 +21,11 @@ func main() {
 		os.Exit(1)
 	}
 
+	if len(xps) > 1 && len(xrps) > 1 {
+		fmt.Println("cannot have range and port flag at the same time")
+		os.Exit(1)
+	}
+
 	// checks if each port provided is an integer
 	for _, p := range xps {
 		if _, err := strconv.Atoi(p); err != nil {
@@ -51,18 +56,19 @@ func main() {
 	if runtime.GOOS == "windows" {
 		msg, err := execWindows(xps, xrps)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, err.Error())
+			// fmt.Fprintf(os.Stderr, err.Error())
+			fmt.Println(err.Error())
 			os.Exit(1)
 		}
-		fmt.Fprintf(os.Stdout, msg)
+		fmt.Println(msg)
 		os.Exit(0)
 	} else {
 		msg, err := execUnix(xps, xrps)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, err.Error())
+			fmt.Println(err.Error())
 			os.Exit(1)
 		}
-		fmt.Fprintf(os.Stdout, msg)
+		fmt.Println(msg)
 		os.Exit(1)
 	}
 }

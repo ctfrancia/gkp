@@ -14,8 +14,8 @@ type Ports struct {
 func PortsToKill() *Ports {
 	p := new(Ports)
 
-	flag.StringVar(&p.Ports, "p", "", "port(s) wished to kill eg: `3000 3005` or `3000`")
-	flag.StringVar(&p.PortRange, "r", "", "range of ports wished to terminate")
+	flag.StringVar(&p.Ports, "p", "", "port(s) wished to terminate example: '3000 3005' or '3000'")
+	flag.StringVar(&p.PortRange, "r", "", "range of ports wished to terminate example: '3000 3005'")
 	flag.Parse()
 
 	return p

@@ -16,7 +16,8 @@ This is a learning project. While you can use it on your own machine I do not ho
 
 ### TODO
 - clean up main.go for better legibility
-- check for if both flags are presented, should not allow
+- move flag checker into dedicated module linked to todo above
+- ~~check for if both flags are presented, should not allow~~
 
 ## License
 MIT
