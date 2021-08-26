@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"runtime"
 	"strconv"
 	"strings"
 
@@ -44,6 +45,24 @@ func main() {
 	// checks to make sure that left to right the numbers increase
 	if xrps[0] > xrps[1] {
 		fmt.Fprintf(os.Stderr, "first argument must be less than second argument")
+		os.Exit(1)
+	}
+
+	if runtime.GOOS == "windows" {
+		msg, err := execWindows(xps, xrps)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, err.Error())
+			os.Exit(1)
+		}
+		fmt.Fprintf(os.Stdout, msg)
+		os.Exit(0)
+	} else {
+		msg, err := execUnix(xps, xrps)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, err.Error())
+			os.Exit(1)
+		}
+		fmt.Fprintf(os.Stdout, msg)
 		os.Exit(1)
 	}
 }
