@@ -20,6 +20,8 @@ This is a learning project. While you can use it on your own machine I do not ho
 - ~~check for if both flags are presented, should not allow~~
 - Terminate multiple ports with the `-p` flag
 - Terminate range of flags with `-r` flag
+- ~~Better flag checking if `-p` or `-r` is provided rather than based on `len()` of args...~~
+- Run process based on flag provided, right now it's mixed (SOC issue)
 
 ## License
 MIT

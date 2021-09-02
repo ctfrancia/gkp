@@ -11,23 +11,21 @@ import (
 
 func main() {
 	ports := cli.PortsToKill()
-	v := newValidator()
 	var intRangePorts []int
+	v := newValidator()
 
 	var xps []string = strings.Split(ports.Ports, " ")
 	var xrps []string = strings.Split(ports.PortRange, " ")
 
 	_ = v.rangeOfPortsAreNumbers(xps)
-	if len(xrps) == 2 {
+	// checks if the first item is the defaulted "" value
+	if xrps[0] != "" {
 		intRangePorts = v.rangeOfPortsAreNumbers(xrps)
+		v.rangeAreAscending(intRangePorts[0], intRangePorts[1])
 	}
 
 	v.oneFlagProvided(xps, xrps)
 	v.multipleFlagsNotProvided(xps, xrps)
-
-	if len(xrps) > 1 {
-		v.rangeAreAscending(intRangePorts[0], intRangePorts[1])
-	}
 
 	v.isValid()
 
