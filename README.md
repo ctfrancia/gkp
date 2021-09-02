@@ -15,9 +15,11 @@ TODO: write documentation for this
 This is a learning project. While you can use it on your own machine I do not hold any responsibility. This disclaimer will go away after some time and been audited by someone much more competent than my self that nothing serious will happen.
 
 ### TODO
-- clean up main.go for better legibility
-- move flag checker into dedicated module linked to todo above
+- ~~clean up main.go for better legibility~~
+- ~~move flag checker into dedicated module linked to todo above~~
 - ~~check for if both flags are presented, should not allow~~
+- Terminate multiple ports with the `-p` flag
+- Terminate range of flags with `-r` flag
 
 ## License
 MIT
