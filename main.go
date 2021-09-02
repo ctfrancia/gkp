@@ -12,9 +12,13 @@ import (
 
 func main() {
 	ports := cli.PortsToKill()
+	v := newValidator()
 
 	var xps []string = strings.Split(ports.Ports, " ")
 	var xrps []string = strings.Split(ports.PortRange, " ")
+
+	v.validateInputIsNumber(xps)
+	v.validateInputIsNumber(xrps)
 
 	if len(xps) < 1 && len(xrps) < 1 {
 		fmt.Fprintf(os.Stderr, "no flags provided\n")
@@ -34,16 +38,19 @@ func main() {
 		}
 	}
 
-	// check if the two numbers provided are valid integers
-	for _, rp := range xrps {
-		if _, err := strconv.Atoi(rp); err != nil {
-			fmt.Fprintf(os.Stderr, "Error: port argument is not a number %s \n", rp)
-			os.Exit(1)
+	if len(xrps) > 1 {
+		fmt.Println("shoiuld nto be here", xrps)
+		// check if the two numbers provided are valid integers
+		for _, rp := range xrps {
+			if _, err := strconv.Atoi(rp); err != nil {
+				fmt.Fprintf(os.Stderr, "Error: port argument is not a number %s \n", rp)
+				os.Exit(1)
+			}
 		}
 	}
 
 	if len(xrps) != 2 {
-		fmt.Fprintf(os.Stderr, "only two numbers are accepatble for a range, eg: 3000 3002")
+		fmt.Fprintf(os.Stderr, "only two numbers are accepatble for a range, eg: '3000 3002'")
 		os.Exit(1)
 	}
 
