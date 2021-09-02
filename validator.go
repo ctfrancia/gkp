@@ -36,7 +36,15 @@ func (v *Validator) multipleFlagsNotProvided(ports, portRange []string) {
 
 func (v *Validator) rangeOfPortsAreNumbers(ports []string) []int {
 	var numPorts []int
+
+	if len(ports) < 1 {
+		return numPorts
+	}
+
+	fmt.Println(ports)
+
 	for _, port := range ports {
+		fmt.Printf("in validator %T \n", port)
 		if _, err := strconv.Atoi(port); err != nil {
 			msg := fmt.Sprintf("Error: port argument is not a number: %s \n", port)
 			v.addError(msg)
